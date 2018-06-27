@@ -8,7 +8,8 @@
 
 namespace IopenQQ\Core;
 
-
+use Doctrine\Common\Cache\Cache as CacheInterface;
+use Doctrine\Common\Cache\FilesystemCache;
 use Pimple\Container;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +18,9 @@ class App extends Container
     protected static $valid_config_key = [
         'client_id',
         'client_secret',
-        'redirect_uri'
+        'redirect_uri',
+        'cache',
+        'cache_dir',
     ];
     protected $providers = [
         ServiceProviders\OauthServiceProvider::class,
@@ -30,7 +33,6 @@ class App extends Container
         $this['config'] = function () use ($config) {
             return new Config($config);
         };
-
         if ($this['config']['debug']) {
             error_reporting(E_ALL);
         }
@@ -47,6 +49,13 @@ class App extends Container
         $this['request'] = function () {
             return Request::createFromGlobals();
         };
+        if (!empty($this['config']['cache']) && $this['config']['cache'] instanceof CacheInterface) {
+            $this['cache'] = $this['config']['cache'];
+        } else {
+            $this['cache'] = function () {
+                return new FilesystemCache($this['config']->get('cache_dir', sys_get_temp_dir()));
+            };
+        }
     }
 
 
