@@ -53,7 +53,7 @@ class AccessToken extends AbstractAPI
     {
         $access_token = $data['data']['access_token'];
         $expires_in = $data['data']['expires_in'];
-        $refresh_token = $data['data']['refresh_toekn'];
+        $refresh_token = $data['data']['refresh_token'];
         $this->getCacheHandler()->save($this->accessTokenCacheKey . $client_id, $access_token, $expires_in - 1500);
         $this->getCacheHandler()->save($this->refreshTokenCacheKey . $client_id, $refresh_token, 0);
     }

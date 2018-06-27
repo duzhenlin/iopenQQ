@@ -68,7 +68,7 @@ class Oauth extends AbstractAPI
                 'access_token' => $result['data']['access_token'],
                 'openid' => $result['data']['openid'],
                 'scope' => $result['data']['scope'],
-                'refresh_toekn' => $result['data']['refresh_toekn'],
+                'refresh_token' => $result['data']['refresh_token'],
             ];
             $this->oauth_access_token->cacheToken($appid, $result);
         }
