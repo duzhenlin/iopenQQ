@@ -12,16 +12,47 @@ use IopenQQ\Core\Collection;
  */
 class Oauth extends AbstractAPI
 {
+    /**
+     *
+     */
     const GET_CODE_URL = 'https://auth.om.qq.com/omoauth2/authorize?';
+    /**
+     *
+     */
     const GET_TOKEN_URL = 'https://auth.om.qq.com/omoauth2/accesstoken?';
+    /**
+     *
+     */
     const GET_REFRESH_TOKEN_URL = 'https://auth.om.qq.com/omoauth2/refreshtoken?';
+    /**
+     *
+     */
     const GET_USER_INFO_URL = 'https://api.om.qq.com/media/basicinfoauth?';
 
+    /**
+     * @var
+     */
     protected $client_id;
+    /**
+     * @var
+     */
     protected $client_secret;
+    /**
+     * @var
+     */
     protected $redirect_uri;
+    /**
+     * @var
+     */
     protected $oauth_access_token;
 
+    /**
+     * Oauth constructor.
+     * @param $client_id
+     * @param $client_secret
+     * @param $redirect_uri
+     * @param $oauth_access_token
+     */
     public function __construct($client_id, $client_secret, $redirect_uri, $oauth_access_token)
     {
         $this->client_id = $client_id;
@@ -49,6 +80,7 @@ class Oauth extends AbstractAPI
 
 
     /**
+     * 通过code换取第三方授权access_token
      * @param $code
      * @return bool|Collection
      * @throws \IopenQQ\Core\Exceptions\HttpException
@@ -91,6 +123,7 @@ class Oauth extends AbstractAPI
             'openid' => $openid,
         ];
         $result = $this->parseJSON('post', [self::GET_USER_INFO_URL, $params]);
+        !$result['code'] ? $result->set('openid', $openid) : false;
         return !$result['code'] ? $result : false;
     }
 }

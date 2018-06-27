@@ -71,6 +71,7 @@ abstract class  AbstractAPI
 
         $this->checkAndThrow($contents);
 
+
         return new Collection($contents);
     }
 
@@ -80,7 +81,7 @@ abstract class  AbstractAPI
      */
     protected function checkAndThrow(array $contents)
     {
-        if (isset($contents['code']) && 0 !== $contents['code']) {
+        if (isset($contents['code']) && 0 != $contents['code']) {
             if (empty($contents['msg'])) {
                 $contents['msg'] = 'Unknown';
             }

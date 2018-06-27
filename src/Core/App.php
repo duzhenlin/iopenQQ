@@ -8,18 +8,23 @@
 
 namespace IopenQQ\Core;
 
+
 use Doctrine\Common\Cache\Cache as CacheInterface;
 use Doctrine\Common\Cache\FilesystemCache;
 use Pimple\Container;
 use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Class App
  * @property  \IopenQQ\Oauth\Oauth $oauth
+ * @property  \IopenQQ\Article\Article $article
+ * @property  \IopenQQ\Oauth\AccessToken $oauth_access_token
  * @package IopenQQ\Core
  */
 class App extends Container
 {
+    /**
+     * @var array
+     */
     protected static $valid_config_key = [
         'client_id',
         'client_secret',
@@ -27,10 +32,18 @@ class App extends Container
         'cache',
         'cache_dir',
     ];
+    /**
+     * @var array
+     */
     protected $providers = [
         ServiceProviders\OauthServiceProvider::class,
+        ServiceProviders\ArticleServiceProvider::class,
     ];
 
+    /**
+     * App constructor.
+     * @param $config
+     */
     public function __construct($config)
     {
         parent::__construct();
@@ -38,6 +51,7 @@ class App extends Container
         $this['config'] = function () use ($config) {
             return new Config($config);
         };
+
         if ($this['config']['debug']) {
             error_reporting(E_ALL);
         }
@@ -89,6 +103,10 @@ class App extends Container
         return $config;
     }
 
+    /**
+     * @param $provider
+     * @return $this
+     */
     public function addProvider($provider)
     {
         array_push($this->providers, $provider);
@@ -96,6 +114,9 @@ class App extends Container
         return $this;
     }
 
+    /**
+     * @param array $providers
+     */
     public function setProviders(array $providers)
     {
         $this->providers = [];
@@ -105,16 +126,27 @@ class App extends Container
         }
     }
 
+    /**
+     * @return array
+     */
     public function getProviders()
     {
         return $this->providers;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function __get($id)
     {
         return $this->offsetGet($id);
     }
 
+    /**
+     * @param $id
+     * @param $value
+     */
     public function __set($id, $value)
     {
         $this->offsetSet($id, $value);
