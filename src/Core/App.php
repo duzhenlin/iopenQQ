@@ -13,6 +13,11 @@ use Doctrine\Common\Cache\FilesystemCache;
 use Pimple\Container;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class App
+ * @property  \IopenQQ\Oauth\Oauth $oauth
+ * @package IopenQQ\Core
+ */
 class App extends Container
 {
     protected static $valid_config_key = [

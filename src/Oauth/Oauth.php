@@ -15,7 +15,7 @@ class Oauth extends AbstractAPI
     const GET_CODE_URL = 'https://auth.om.qq.com/omoauth2/authorize?';
     const GET_TOKEN_URL = 'https://auth.om.qq.com/omoauth2/accesstoken?';
     const GET_REFRESH_TOKEN_URL = 'https://auth.om.qq.com/omoauth2/refreshtoken?';
-    const GET_USER_INFO_URL = 'https://auth.om.qq.com/omoauth2/refreshtoken?';
+    const GET_USER_INFO_URL = 'https://api.om.qq.com/media/basicinfoauth?';
 
     protected $client_id;
     protected $client_secret;
@@ -49,12 +49,11 @@ class Oauth extends AbstractAPI
 
 
     /**
-     * @param $appid
      * @param $code
      * @return bool|Collection
      * @throws \IopenQQ\Core\Exceptions\HttpException
      */
-    public function getOauthAccessToken($appid, $code)
+    public function getOauthAccessToken($code)
     {
         $params = [
             'client_id' => $this->client_id,
@@ -62,36 +61,17 @@ class Oauth extends AbstractAPI
             'code' => $code,
             'grant_type' => 'authorization_code',
         ];
-        $result = $this->parseJSON('get', [self::GET_TOKEN_URL, $params]);
+        $result = $this->parseJSON('post', [self::GET_TOKEN_URL, $params]);
+
         if (!$result['code']) {
             $data = [
                 'access_token' => $result['data']['access_token'],
                 'openid' => $result['data']['openid'],
-                'scope' => $result['data']['scope'],
+
                 'refresh_token' => $result['data']['refresh_token'],
             ];
-            $this->oauth_access_token->cacheToken($appid, $result);
-        }
-        return !$result['code'] ? new Collection($data) : false;
-    }
-
-    public function refreshToken($openid)
-    {
-        $params = [
-            'openid' => $openid,
-            'client_id' => $this->client_id,
-            'refresh_token' => $refresh_token,
-            'grant_type' => 'refreshtoken',
-        ];
-        $result = $this->parseJSON('get', [self::GET_REFRESH_TOKEN_URL, $params]);
-        if (!$result['code']) {
-            $data = [
-                'access_token' => $result['data']['access_token'],
-                'openid' => $result['data']['openid'],
-                'scope' => $result['data']['scope'],
-                'refresh_toekn' => $result['data']['refresh_toekn'],
-            ];
-            $this->oauth_access_token->cacheToken($appid, $result);
+            @$data['scope'] = $result['data']['scope'];
+            $this->oauth_access_token->cacheToken($this->client_id, $result);
         }
         return !$result['code'] ? new Collection($data) : false;
     }
@@ -103,13 +83,14 @@ class Oauth extends AbstractAPI
      * @return bool|Collection
      * @throws \IopenQQ\Core\Exceptions\HttpException
      */
-    public function getOauthUserinfo($openid, $access_token)
+    public function getOauthUserinfo($openid, $access_token = '')
     {
+        $access_token = $this->oauth_access_token->getToken($this->client_id);
         $params = [
             'access_token' => $access_token,
             'openid' => $openid,
         ];
-        $result = $this->parseJSON('get', [self::GET_USER_INFO_URL, $params]);
+        $result = $this->parseJSON('post', [self::GET_USER_INFO_URL, $params]);
         return !$result['code'] ? $result : false;
     }
 }
