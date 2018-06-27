@@ -14,7 +14,7 @@
 ## 安装
 
 ```shell
-composer require duzhenlin/IopenQQ
+composer require duzhenlin/iopen-qq
 ```
 
 ## 贡献代码
