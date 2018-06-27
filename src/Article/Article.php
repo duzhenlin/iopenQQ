@@ -122,7 +122,6 @@ class Article extends AbstractAPI
             'cat' => $data['cat'],
             'md5' => $data['md5'],
             'desc' => $data['desc'],
-            'media' => $data['media'],
         ];
         if ($data['apply']) {
             $params['apply'] = $data['apply'];

@@ -73,8 +73,11 @@ class Oauth extends AbstractAPI
             'client_id' => $this->client_id,
             'redirect_uri' => $this->redirect_uri,
             'response_type' => 'code',
-            'state' => $state,
+
         ];
+        if ($state) {
+            $params['state'] = $state;
+        }
         return self::GET_CODE_URL . http_build_query($params);
     }
 
@@ -111,11 +114,10 @@ class Oauth extends AbstractAPI
     /**
      * 获取用户信息
      * @param $openid
-     * @param $access_token
      * @return bool|Collection
      * @throws \IopenQQ\Core\Exceptions\HttpException
      */
-    public function getOauthUserinfo($openid, $access_token = '')
+    public function getOauthUserInfo($openid)
     {
         $access_token = $this->oauth_access_token->getToken($this->client_id);
         $params = [

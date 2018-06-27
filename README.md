@@ -9,18 +9,12 @@
 2. **[composer](https://getcomposer.org/)**
 3. openssl 扩展
 
-> SDK 对所使用的框架并无特别要求
-
-## 安装
-
-```shell
-composer require duzhenlin/iopen-qq
-```
-
-## 贡献代码
-
-[贡献指南](CONTRIBUTING.md)
-
 ## License
 
 MIT
+## 文档
+
+  - [安装](docs/installation.md)
+  - [入门](docs/Index.md)
+  - [授权](docs/Intro.md)
+  - [文章发布](docs/article.md)
