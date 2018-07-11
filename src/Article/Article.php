@@ -27,7 +27,7 @@ class Article extends AbstractAPI
     /**
      *
      */
-    const AUTH_PUB_VID_URL = 'http://api.om.qq.com/article/authpubvid';
+    const AUTH_PUB_VID_URL = 'https://api.om.qq.com/article/authpubvid';
     /**
      *
      */
@@ -113,7 +113,6 @@ class Article extends AbstractAPI
         if (!file_exists($path) || !is_readable($path)) {
             throw new \InvalidArgumentException("文件不存在或者不可读： '$path'");
         }
-
         $params = [
             'access_token' => $this->access_token,
             'openid' => $openid,
@@ -126,7 +125,8 @@ class Article extends AbstractAPI
         if ($data['apply']) {
             $params['apply'] = $data['apply'];
         }
-        return $this->parseJSON('upload', [self::AUTH_PUB_VID_URL, ['media' => $path], $params]);
+
+        return $this->parseJSON('upload', [self::AUTH_PUB_VID_URL, ['media' => $path], [], $params]);
     }
 
     /**

@@ -72,6 +72,7 @@ class AccessToken extends AbstractAPI
         if (!$access_token || $forceRefresh) {
             $access_token = $this->getAccessToken($client_id);
         }
+
         return $access_token;
     }
 
@@ -89,7 +90,7 @@ class AccessToken extends AbstractAPI
             'refresh_token' => $this->getCacheHandler()->fetch($this->refreshTokenCacheKey . $this->client_id),
             'grant_type' => 'refreshtoken',
         ];
-        $token = $this->parseJSON('get', [self::ACCESS_TOKEN_URL, $params]);
+        $token = $this->parseJSON('post', [self::ACCESS_TOKEN_URL, $params]);
         if (!$token['code']) {
             $this->cacheToken($this->client_id, $token);
         }
