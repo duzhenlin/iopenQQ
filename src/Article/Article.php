@@ -122,7 +122,7 @@ class Article extends AbstractAPI
             'md5' => $data['md5'],
             'desc' => $data['desc'],
         ];
-        if ($data['apply']) {
+        if (isset($data['apply'])) {
             $params['apply'] = $data['apply'];
         }
 
@@ -139,6 +139,7 @@ class Article extends AbstractAPI
     public function authPubPic($openid, $data)
     {
 
+
         $params = [
             'access_token' => $this->access_token,
             'openid' => $openid,
@@ -146,28 +147,28 @@ class Article extends AbstractAPI
             'content' => $data['content'],
             'cover_pic' => $data['cover_pic'],
         ];
-        if ($data['cover_type']) {
+        if (isset($data['cover_type'])) {
             $params['cover_type'] = $data['cover_type'];
         }
-        if ($data['tag']) {
+        if (isset($data['tag'])) {
             $params['tag'] = $data['tag'];
         }
-        if ($data['category']) {
+        if (isset($data['category'])) {
             $params['category'] = $data['category'];
         }
-        if ($data['apply']) {
+        if (isset($data['apply'])) {
             $params['apply'] = $data['apply'];
         }
-        if ($data['original_platform']) {
+        if (isset($data['original_platform'])) {
             $params['original_platform'] = $data['original_platform'];
         }
-        if ($data['original_url']) {
+        if (isset($data['original_url'])) {
             $params['original_url'] = $data['original_url'];
         }
-        if ($data['original_author']) {
+        if (isset($data['original_author'])) {
             $params['original_author'] = $data['original_author'];
         }
         $result = $this->parseJSON('post', [self::AUTH_PUB_PIC_URL, $params]);
-        return !$result['code'] ? $result : false;
+        return !isset($result['code']) ? $result : false;
     }
 }
